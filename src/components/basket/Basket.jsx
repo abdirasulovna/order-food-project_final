@@ -1,50 +1,56 @@
-import { useContext } from "react";
+import React from "react";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { BasketContext } from "../../store/BasketContext";
+import {
+  deleteBasketItem,
+  updateBasketItem,
+} from "../../store/basket/basketReducer";
 import Modal from "../UI/Modal";
-import TotalAmount from "../basket/TotalAmount";
 import BasketItem from "./BasketItem";
+import TotalAmount from "./TotalAmount";
 
-const Basket = ({ showBasketHandler }) => {
-  const { items, updateBasketItem, deleteBasketItem } =
-    useContext(BasketContext);
+const Basket = ({ onClose }) => {
+  const items = useSelector((state) => state.basket.items);
 
-  const getTotalPrice = () => {
-    return items.reduce((sum, { price, amount }) => sum + amount * price, 0);
-  };
+  const dispatch = useDispatch();
+
+  const getTotalPrice = useCallback(() => {
+    return items.reduce((sum, { amount, price }) => sum + amount * price, 0);
+  }, [items]);
+
   const decrementAmount = (id, amount) => {
     if (amount > 1) {
-      updateBasketItem({ amount: amount - 1, id: id });
+      dispatch(updateBasketItem({ amount: amount - 1, id: id }));
     } else {
-      deleteBasketItem(id);
+      dispatch(deleteBasketItem(id));
     }
   };
+
   const incrementAmount = (id, amount) => {
-    updateBasketItem({ amount: amount + 1, id: id });
-    console.log("asdasd");
+    dispatch(updateBasketItem({ amount: amount + 1, id: id }));
   };
+
   return (
-    <Modal showBasketHandler={showBasketHandler}>
+    <Modal onClose={onClose}>
       <Content>
         {items.length ? (
           <FixedHeightContainer>
-            {items.map((item) => {
-              return (
-                <BasketItem
-                  key={item._id}
-                  incrementAmount={() => incrementAmount(item._id, item.amount)}
-                  decrementAmount={() => decrementAmount(item._id, item.amount)}
-                  title={item.title}
-                  price={item.price}
-                  amount={item.amount}
-                />
-              );
-            })}
+            {items.map((item) => (
+              <BasketItem
+                key={item._id}
+                incrementAmount={() => incrementAmount(item._id, item.amount)}
+                decrementAmount={() => decrementAmount(item._id, item.amount)}
+                title={item.title}
+                price={item.price}
+                amount={item.amount}
+              />
+            ))}
           </FixedHeightContainer>
         ) : null}
         <TotalAmount
           price={getTotalPrice()}
-          showBasketHandler={showBasketHandler}
+          onCLose={onClose}
           onOrder={() => {}}
         />
       </Content>

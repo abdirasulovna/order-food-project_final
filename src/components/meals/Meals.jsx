@@ -1,52 +1,43 @@
-import { useEffect, useState } from "react";
+import React, { memo } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { fetchApi } from "../../lib/fetchApi";
 import MealItem from "./meal-item/MealItem";
+import { getMeals } from "../../store/meals/mealsReducer";
 
+const Meals = () => {
+  const { meals, isLoading, error } = useSelector((state) => state.meals);
 
-export const Meals = () => {
-  const [meals, setMeals] = useState([]);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
 
-  const getMeals = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetchApi("foods");
-      setMeals(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      setError("Failed to load meals");
-    }
-  };
   useEffect(() => {
-    getMeals();
-  }, []);
+    dispatch(getMeals());
+  }, [dispatch]);
+
   return (
     <Card>
-      <ul>
-        {isLoading && <p>Loading......</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {meals.map((meal) => {
-          return (
-            <MealItem
-              key={meal._id}
-              title={meal.title}
-              description={meal.description}
-              price={meal.price}
-              id={meal._id}
-            />
-          );
-        })}
-      </ul>
+      {isLoading && !error && <p>Loading</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <StyledUl>
+        {meals.map((item) => (
+          <MealItem key={item._id} item={item} />
+        ))}
+      </StyledUl>
     </Card>
   );
 };
 
+export default memo(Meals);
+
 const Card = styled.div`
-  background: #ffffff;
-  border-radius: 16px;
-  width: 75%;
-  margin: 40px auto;
-  padding: 40px 40px 36px 40px;
+  background: #fff;
+  border-radius: 1rem;
+  width: 64.9375rem;
+  margin: 160px auto;
+`;
+
+const StyledUl = styled.ul`
+  list-style: none;
+  padding: 20px 40px;
+  align-items: center;
 `;

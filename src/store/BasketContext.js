@@ -1,15 +1,15 @@
 import { createContext, useEffect, useState } from "react";
-import { fetchApi } from "../lib/fetchApi";
+import { fetchAPI } from "../lib/fetchApi";
 
 export const BasketContext = createContext({
   items: [],
 });
+
 export const BasketProvider = ({ children }) => {
   const [items, setItems] = useState([]);
-
   const updateBasketItem = async ({ id, amount }) => {
     try {
-      const { data } = await fetchApi(`basketItem/${id}/update`, {
+      const { data } = await fetchAPI(`basketItem/${id}/update`, {
         method: "PUT",
         body: { amount },
       });
@@ -20,7 +20,7 @@ export const BasketProvider = ({ children }) => {
   };
   const deleteBasketItem = async (id) => {
     try {
-      const { data } = await fetchApi(`basketItem/${id}/delete`, {
+      const { data } = await fetchAPI(`basketItem/${id}/delete`, {
         method: "DELETE",
       });
       setItems(data.items);
@@ -28,22 +28,24 @@ export const BasketProvider = ({ children }) => {
       console.log(error);
     }
   };
+
   const getBasket = async () => {
     try {
-      const { data } = await fetchApi("basket");
+      const { data } = await fetchAPI("basket");
 
       setItems(data.items);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getBasket();
   }, []);
 
   const addToBasket = async (newItem) => {
     try {
-      const response = await fetchApi(`foods/${newItem.id}/addTobasket`, {
+      const response = await fetchAPI(`foods/${newItem.id}/addToBasket`, {
         method: "POST",
         body: { amount: newItem.amount },
       });
@@ -52,6 +54,7 @@ export const BasketProvider = ({ children }) => {
       console.log(error);
     }
   };
+
   const state = {
     items,
     addToBasket,

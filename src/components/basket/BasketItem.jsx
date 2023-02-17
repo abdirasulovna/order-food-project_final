@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "../UI/Button";
-import { ReactComponent as DecreaseIcon } from "../../assets/icons/decrease.svg";
-import { ReactComponent as IncreaseIcon } from "../../assets/icons/increase.svg";
+import {Button} from "../UI/Button";
+import { ReactComponent as PlusIcon } from "../../assets/icons/increase.svg";
+import { ReactComponent as MinusIcon } from "../../assets/icons/decrease.svg";
 
 const BasketItem = ({
   title,
@@ -17,22 +17,22 @@ const BasketItem = ({
       <Content>
         <PriceAndAmountContainer>
           <Price>${price}</Price>
-          <Amount>X {amount}</Amount>
+          <Amount>x{amount}</Amount>
         </PriceAndAmountContainer>
         <CounterContainer>
           <Button
-            borderStyled="sqaured"
+            borderStyle="squared"
             variant="outlined"
             onClick={decrementAmount}
           >
-            <DecreaseIcon />
+            <MinusIcon />
           </Button>
           <Button
-            borderStyled="sqaured"
+            borderStyle="squared"
             variant="outlined"
             onClick={incrementAmount}
           >
-            <IncreaseIcon />
+            <PlusIcon />
           </Button>
         </CounterContainer>
       </Content>

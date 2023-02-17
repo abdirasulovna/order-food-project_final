@@ -1,22 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import {MealItemForm} from "./MealItemForm";
-const MealItem = ({ title,description,price,id }) => {
+import MealItemForm from "./MealItemForm";
+
+const MealItem = ({ item }) => {
   return (
     <Container>
       <StyledItemInfo>
-        <StyledTitle>{title}</StyledTitle>
-        <p>{description}</p>
-        <span>${price}</span>
+        <StyledTitle>{item.title}</StyledTitle>
+        <span>{item.description}</span>
+        <p>${item.price}</p>
       </StyledItemInfo>
-      <div>
-        <MealItemForm id={id} price={price} title={title } />
-      </div>
+      <MealItemForm id={item._id} title={item.title} price={item.price} />
     </Container>
   );
 };
 
 export default MealItem;
+
+const StyledTitle = styled.h4`
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  color: #222222;
+  margin: 0;
+  text-align: start;
+`;
+
 
 const Container = styled.li`
   list-style: none;
@@ -31,6 +40,7 @@ const Container = styled.li`
   }
 `;
 
+
 const StyledItemInfo = styled.div`
   margin-bottom: 20px;
   p {
@@ -40,6 +50,7 @@ const StyledItemInfo = styled.div`
     line-height: 24px;
     margin: 0;
     margin-top: 4px;
+    text-align: start;
   }
   span {
     color: #ad5502;
@@ -48,11 +59,4 @@ const StyledItemInfo = styled.div`
     line-height: 30px;
     margin-top: 4px;
   }
-`;
-const StyledTitle = styled.h4`
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 27px;
-  color: #222222;
-  margin: 0;
 `;

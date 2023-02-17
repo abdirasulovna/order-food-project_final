@@ -1,17 +1,22 @@
-import { useContext, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { BasketContext } from "../../../store/BasketContext";
 import { Button } from "../../UI/Button";
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus-icons.svg";
+import { useState } from "react";
+import { addToBasket } from "../../../store/basket/basketReducer";
+import { useDispatch } from "react-redux";
 
-export const MealItemForm = ({ id, title, price }) => {
-  const { addToBasket } = useContext(BasketContext);
+const MealItemForm = ({ id, title, price }) => {
   const [amount, setAmount] = useState(1);
-  const amountChangeHandler = (event) => {
-    setAmount(+event.target.value);
+
+  const dispatch = useDispatch();
+
+  const amountChangeHandler = (e) => {
+    setAmount(e.target.value);
   };
-  const submitHandler = (event) => {
-    event.preventDefault();
+
+  const submitHandler = (e) => {
+    e.preventDefault();
 
     const basketItem = {
       id,
@@ -19,8 +24,10 @@ export const MealItemForm = ({ id, title, price }) => {
       title,
       amount,
     };
-    addToBasket(basketItem);
+
+    dispatch(addToBasket(basketItem));
   };
+
   return (
     <StyledForm onSubmit={submitHandler}>
       <Container>
@@ -29,19 +36,22 @@ export const MealItemForm = ({ id, title, price }) => {
           <input
             value={amount}
             onChange={amountChangeHandler}
+            max={5}
+            min={0}
             type="number"
             id={id}
-            min={1}
-            max={5}
           />
         </StyledInputContainer>
       </Container>
-      <StyledIcon />
-      <Button>Add</Button>
+      <Button>
+        <StyledIcon />
+        Add
+      </Button>
     </StyledForm>
   );
 };
 
+export default MealItemForm;
 const Container = styled.div`
   margin-bottom: 15px;
 `;
@@ -69,7 +79,6 @@ const StyledInputContainer = styled.div`
     line-height: 24px;
     padding: 4px 12px;
     outline: none;
-
     color: #222222;
   }
 `;

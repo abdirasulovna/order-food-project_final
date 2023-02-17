@@ -1,46 +1,73 @@
 import React from "react";
 import styled from "styled-components";
-import {ReactComponent as BasketIcon } from "../../assets/icons/basket-icon.svg"
+import { ReactComponent as BasketIcon } from "../../assets/icons/basket-icon.svg";
 
- export const BasketButton = ({ count,...restProps }) => {
+const BusketButton = ({ count, ...props }) => {
   return (
-    <StyledButton {...restProps}>
+    <StyledButton {...props}>
       <BasketIcon />
-      <span>Your cart</span>
-      <StyledCounter id="counter">{count || 0}</StyledCounter>
+      <StyledTitle>You Cart</StyledTitle>
+      <StyledCounter id="counter">{count}</StyledCounter>
     </StyledButton>
   );
 };
 
+export default BusketButton;
+
 const StyledButton = styled.button`
-  background-color: #5a1f08;
-  padding: 12px 32px;
+  background: #5a1f08;
+  color: #fff;
+  border-radius: 1.25rem;
+  padding: 0.75rem 2rem;
   font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-  border-radius: 30px;
-  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.5rem;
   border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  gap: 10px;
-  :hover {
+
+  &:hover {
     background-color: #2c0d00;
   }
 
-  :hover > #counter {
-    background-color: #672003;
+  &:hover > #counter {
+    background: #662207;
+  }
+
+  &.bump {
+    animation: bump 300ms ease-out;
+  }
+
+  @keyframes bump {
+    0% {
+      transform: scale(1);
+    }
+    10% {
+      transform: scale(0.9);
+    }
+    30% {
+      transform: scale(1.1);
+    }
+    50% {
+      transform: scale(1.15);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 `;
 
+const StyledTitle = styled.span`
+  margin: 0 1.5rem 0 0.75rem;
+`;
 
 const StyledCounter = styled.span`
-  background-color: #8a2b06;
-  border-radius: 30px;
+  background: #8a2b06;
+  border-radius: 1.875rem;
+  color: #fff;
   font-weight: 700;
-  font-size: 20px;
-  line-height: 27px;
-  padding: 4px 20px;
-  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1.6875rem;
+  padding: 0.25rem 1.25rem;
 `;

@@ -1,16 +1,25 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { BasketContext } from "../../store/BasketContext";
-import {BasketButton} from "../header/BasketButton"
+import { getBasket } from "../../store/basket/basketReducer";
+import BasketButton from "./BasketButton";
 
-export const Header = ({ onShowBasket }) => {
-  const { items } = useContext(BasketContext);
+const Header = ({ onShowBasket }) => {
+  const items = useSelector((state) => state.basket.items);
   const [animationClass, setAnimationClass] = useState("");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBasket());
+  }, [dispatch]);
 
   const calculateTotalAmount = () => {
     const sum = items.reduce((s, item) => {
       return s + item.amount;
     }, 0);
+
     return sum;
   };
 
@@ -20,6 +29,7 @@ export const Header = ({ onShowBasket }) => {
     const id = setTimeout(() => {
       setAnimationClass("");
     }, 300);
+
     return () => {
       clearTimeout(id);
     };
@@ -27,34 +37,35 @@ export const Header = ({ onShowBasket }) => {
 
   return (
     <Container>
-      <Logo>React Meals</Logo>
+      <Logo>ReactMeals</Logo>
       <BasketButton
-        onClick={onShowBasket}
         className={animationClass}
+        onClick={onShowBasket}
         count={calculateTotalAmount()}
       />
     </Container>
   );
 };
 
+export default Header;
+
 const Container = styled.header`
   position: fixed;
-  z-index: 1;
   top: 0;
-  background-color: #8a2b06;
-  width: 100%;
-  height: 101px;
   display: flex;
   justify-content: space-between;
-  padding-left: 120px;
-  padding-right: 120px;
+  width: 100%;
+  height: 6.3125rem;
+  background: #8a2b06;
+  padding: 0 7.5rem;
   align-items: center;
+  z-index: 1;
 `;
 
 const Logo = styled.p`
   font-weight: 600;
-  font-size: 38px;
-  line-height: 57px;
-  color: #ffff;
+  font-size: 2.375rem;
+  line-height: 3.5625rem;
+  color: #ffffff;
   margin: 0;
 `;

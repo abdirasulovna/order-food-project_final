@@ -1,13 +1,12 @@
 const BASE_URL =
   "http://ec2-3-122-253-30.eu-central-1.compute.amazonaws.com:5500/api/v1";
 
-export const fetchApi = async (path, options = {}) => {
+export const fetchAPI = async (path, options = {}) => {
   try {
     const requestOptions = {
       method: options.method || "GET",
       headers: { UserID: "nuraiym", "Content-Type": "application/json" },
     };
-
     if (requestOptions.method !== "GET") {
       requestOptions.body = JSON.stringify(options.body);
     }
